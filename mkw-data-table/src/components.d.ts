@@ -10,6 +10,11 @@ export namespace Components {
         "tableData": any;
         "tableHeader": any;
     }
+    interface DataTable {
+        "pageLimit": number;
+        "tableData": any;
+        "tableHeader": any;
+    }
     interface MyComponent {
         "columnHeader": { label: string; key: string; }[];
         "data": { name: string; age: number; id: number; }[];
@@ -34,6 +39,12 @@ declare global {
         prototype: HTMLBasicTableElement;
         new (): HTMLBasicTableElement;
     };
+    interface HTMLDataTableElement extends Components.DataTable, HTMLStencilElement {
+    }
+    var HTMLDataTableElement: {
+        prototype: HTMLDataTableElement;
+        new (): HTMLDataTableElement;
+    };
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
     var HTMLMyComponentElement: {
@@ -42,11 +53,17 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "basic-table": HTMLBasicTableElement;
+        "data-table": HTMLDataTableElement;
         "my-component": HTMLMyComponentElement;
     }
 }
 declare namespace LocalJSX {
     interface BasicTable {
+        "tableData"?: any;
+        "tableHeader"?: any;
+    }
+    interface DataTable {
+        "pageLimit"?: number;
         "tableData"?: any;
         "tableHeader"?: any;
     }
@@ -68,6 +85,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "basic-table": BasicTable;
+        "data-table": DataTable;
         "my-component": MyComponent;
     }
 }
@@ -76,6 +94,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "basic-table": LocalJSX.BasicTable & JSXBase.HTMLAttributes<HTMLBasicTableElement>;
+            "data-table": LocalJSX.DataTable & JSXBase.HTMLAttributes<HTMLDataTableElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
         }
     }
