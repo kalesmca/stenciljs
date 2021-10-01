@@ -35,6 +35,7 @@ export class BasicTable {
   render() {
     return (
       <div>
+        Basic Table
         <table>
           <thead>
             <tr>

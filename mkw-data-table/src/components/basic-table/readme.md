@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type  | Default |
-| ------------- | -------------- | ----------- | ----- | ------- |
-| `tableData`   | `table-data`   |             | `any` | `[]`    |
-| `tableHeader` | `table-header` |             | `any` | `[]`    |
+| Property | Attribute | Description | Type     | Default     |
+| -------- | --------- | ----------- | -------- | ----------- |
+| `data`   | `data`    |             | `string` | `undefined` |
+| `header` | `header`  |             | `string` | `undefined` |
 
 
 ## Dependencies

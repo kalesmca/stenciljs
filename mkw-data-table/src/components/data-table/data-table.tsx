@@ -21,6 +21,7 @@ export class DataTable {
   @State() tableHeader: Array<any> = [];
 
   componentWillLoad() {
+
     this.getUpdatedHeaderValue(this.header);
     this.getUpdatedTableData(this.data);
   }

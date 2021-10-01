@@ -17,7 +17,7 @@ export namespace Components {
     }
     interface MyComponent {
         "columnHeader": { label: string; key: string; }[];
-        "data": { name: string; age: number; id: number; }[];
+        "data": { name: string; age: number; city: string; id: number; }[];
         /**
           * The first name
          */
@@ -79,7 +79,7 @@ declare namespace LocalJSX {
     }
     interface MyComponent {
         "columnHeader"?: { label: string; key: string; }[];
-        "data"?: { name: string; age: number; id: number; }[];
+        "data"?: { name: string; age: number; city: string; id: number; }[];
         /**
           * The first name
          */
