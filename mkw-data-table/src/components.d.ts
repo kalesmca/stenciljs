@@ -7,13 +7,13 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BasicTable {
-        "tableData": any;
-        "tableHeader": any;
+        "data": string;
+        "header": string;
     }
     interface DataTable {
+        "data": string;
+        "header": string;
         "pageLimit": number;
-        "tableData": any;
-        "tableHeader": any;
     }
     interface MyComponent {
         "columnHeader": { label: string; key: string; }[];
@@ -30,6 +30,9 @@ export namespace Components {
           * The middle name
          */
         "middle": string;
+    }
+    interface TestList {
+        "options": string;
     }
 }
 declare global {
@@ -51,21 +54,28 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLTestListElement extends Components.TestList, HTMLStencilElement {
+    }
+    var HTMLTestListElement: {
+        prototype: HTMLTestListElement;
+        new (): HTMLTestListElement;
+    };
     interface HTMLElementTagNameMap {
         "basic-table": HTMLBasicTableElement;
         "data-table": HTMLDataTableElement;
         "my-component": HTMLMyComponentElement;
+        "test-list": HTMLTestListElement;
     }
 }
 declare namespace LocalJSX {
     interface BasicTable {
-        "tableData"?: any;
-        "tableHeader"?: any;
+        "data"?: string;
+        "header"?: string;
     }
     interface DataTable {
+        "data"?: string;
+        "header"?: string;
         "pageLimit"?: number;
-        "tableData"?: any;
-        "tableHeader"?: any;
     }
     interface MyComponent {
         "columnHeader"?: { label: string; key: string; }[];
@@ -83,10 +93,14 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface TestList {
+        "options"?: string;
+    }
     interface IntrinsicElements {
         "basic-table": BasicTable;
         "data-table": DataTable;
         "my-component": MyComponent;
+        "test-list": TestList;
     }
 }
 export { LocalJSX as JSX };
@@ -96,6 +110,7 @@ declare module "@stencil/core" {
             "basic-table": LocalJSX.BasicTable & JSXBase.HTMLAttributes<HTMLBasicTableElement>;
             "data-table": LocalJSX.DataTable & JSXBase.HTMLAttributes<HTMLDataTableElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "test-list": LocalJSX.TestList & JSXBase.HTMLAttributes<HTMLTestListElement>;
         }
     }
 }

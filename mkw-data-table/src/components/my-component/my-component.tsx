@@ -49,8 +49,8 @@ export class MyComponent {
     return (
       <div>
         <div>
-          <basic-table tableData={this.data} tableHeader={this.columnHeader}></basic-table>
-          <data-table tableData={this.data} tableHeader={this.columnHeader}></data-table>
+          <basic-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></basic-table>
+          <data-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></data-table>
         </div>
       </div>
     );

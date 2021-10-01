@@ -1,73 +1,89 @@
-import {Component, Prop, h, State} from '@stencil/core';
+import { Component, Prop, h, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'data-table',
-  styleUrl:'./data-table.css',
-  shadow:true
+  styleUrl: './data-table.css',
+  shadow: true,
 })
-
 export class DataTable {
+  @Prop({ mutable: true }) data: string;
 
-  @Prop({mutable:true}) tableData: any = [];
+  @Prop({ mutable: true }) header: string;
 
-  @Prop({mutable:true}) tableHeader: any = [];
+  @State() currentIndex: number = 1;
 
-  @State() currentIndex : number = 1;
+  @State() startFrom: number = 0;
 
-  @State() startFrom : number = 0;
+  @Prop({ mutable: true }) pageLimit = 5;
 
-  @Prop({mutable:true}) pageLimit = 5;
+  @State() tableData: Array<any> = [];
 
-  getNextData = () =>{
-    debugger
-    if((this.startFrom + this.pageLimit) < this.tableData.length){
+  @State() tableHeader: Array<any> = [];
+
+  componentWillLoad() {
+    this.getUpdatedHeaderValue(this.header);
+    this.getUpdatedTableData(this.data);
+  }
+
+  @Watch('header')
+  getUpdatedHeaderValue(newValue) {
+    if (newValue) {
+      this.tableHeader = JSON.parse(newValue);
+    }
+  }
+
+  @Watch('data')
+  getUpdatedTableData(newValue) {
+    if (newValue) {
+      this.tableData = JSON.parse(newValue);
+    }
+  }
+
+  getNextData = () => {
+    if (this.startFrom + this.pageLimit < this.tableData.length) {
       this.startFrom = this.startFrom + this.pageLimit;
     }
-  }
+  };
 
   getPreviousData = () => {
-    if(this.startFrom){
+    if (this.startFrom) {
       this.startFrom = this.startFrom - this.pageLimit;
     }
-  }
+  };
 
-  render(){
+  render() {
     let tableBodyItems = [];
-    for (let i = this.startFrom; i < (this.startFrom + this.pageLimit) ; i++) {
-      tableBodyItems.push(<tr>
-        <td>{i+1}</td>
-        <td>{this.tableData[i].name}</td>
-        <td>{this.tableData[i].age}</td>
-      </tr>);
+    if (this.tableData.length) {
+      for (let i = this.startFrom; i < this.startFrom + this.pageLimit; i++) {
+        tableBodyItems.push(
+          <tr>
+            <td>{i + 1}</td>
+            {this.tableHeader.map((header, headerIndex) => {
+              return <td key={headerIndex}>{this.tableData[i][header.key]}</td>;
+            })}
+          </tr>,
+        );
+      }
     }
+
     return (
       <div>
         Data Table
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              {this.tableHeader.map((header, headerIndex) => {
-                return <th key={headerIndex}>{header.label}</th>;
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {/* {
-              this.tableData.map((data, index) => {
-                return (
-                  <tr>
-                    <td>{index+1}</td>
-                    <td>{data.name}</td>
-                    <td>{data.age}</td>
-                  </tr>
-                )
-              })
-            } */}
-            {tableBodyItems}
-
-          </tbody>
-        </table>
+        {this.tableHeader.length ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Sno</th>
+                {this.tableHeader.map((header, headerIndex) => {
+                  return <th key={headerIndex}>{header.label}</th>;
+                })}
+              </tr>
+            </thead>
+            <tbody>{tableBodyItems}</tbody>
+          </table>
+        ) : (
+          <div>No table data found</div>
+        )}
         <button
           onClick={() => {
             this.getPreviousData();
