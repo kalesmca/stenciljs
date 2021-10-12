@@ -40,7 +40,7 @@ export class DataTable {
     if (newValue) {
       this.tableData = JSON.parse(newValue);
     }
-    this.paginationNumberList=  Array.from(Array(Math.round(this.tableData.length/this.pageLimit)), (val, index) => index + 1)
+    this.paginationNumberList=  Array.from(Array(Math.round(this.tableData.length/this.pageLimit)), (_, index) => index + 1)
     if(this.tableData.length > (this.paginationNumberList.length*this.pageLimit)){
       this.paginationNumberList.push(this.paginationNumberList.length+1)
     }
