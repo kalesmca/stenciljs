@@ -20,6 +20,8 @@ export class DataTable {
 
   @State() tableHeader: Array<any> = [];
 
+  @State() paginationNumberList: Array<number> = [];
+
   componentWillLoad() {
 
     this.getUpdatedHeaderValue(this.header);
@@ -38,6 +40,10 @@ export class DataTable {
     if (newValue) {
       this.tableData = JSON.parse(newValue);
     }
+    this.paginationNumberList=  Array.from(Array(Math.round(this.tableData.length/this.pageLimit)), (val, index) => index + 1)
+    if(this.tableData.length > (this.paginationNumberList.length*this.pageLimit)){
+      this.paginationNumberList.push(this.paginationNumberList.length+1)
+    }
   }
 
   getNextData = () => {
@@ -52,18 +58,26 @@ export class DataTable {
     }
   };
 
+  setPaginationValue = (index) => {
+    console.log('index:', index)
+    this.startFrom = index*this.pageLimit;
+  }
+
   render() {
     let tableBodyItems = [];
     if (this.tableData.length) {
       for (let i = this.startFrom; i < this.startFrom + this.pageLimit; i++) {
-        tableBodyItems.push(
-          <tr>
-            <td>{i + 1}</td>
-            {this.tableHeader.map((header, headerIndex) => {
-              return <td key={headerIndex}>{this.tableData[i][header.key]}</td>;
-            })}
-          </tr>,
-        );
+        if(this.tableData[i]){
+          tableBodyItems.push(
+            <tr>
+              <td>{i + 1}</td>
+              {this.tableHeader.map((header, headerIndex) => {
+                return <td key={headerIndex}>{this.tableData[i][header.key]}</td>;
+              })}
+            </tr>,
+          );
+        }
+        
       }
     }
 
@@ -85,21 +99,29 @@ export class DataTable {
         ) : (
           <div>No table data found</div>
         )}
+        <div class="pag-container"> 
         <button
           onClick={() => {
             this.getPreviousData();
           }}
         >
-          Prev
+          {"<"}
         </button>
+        {this.paginationNumberList.map((number, index) =>{
+          return(
+            <span  key={index} onClick={()=>{this.setPaginationValue(index)}}>{number}</span>
+          )
+        })}
         <button
           onClick={() => {
             this.getNextData();
           }}
         >
-          {' '}
-          Next
+          {'>'}
+          
         </button>
+        </div>
+        
       </div>
     );
   }

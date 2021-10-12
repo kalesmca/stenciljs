@@ -44,13 +44,14 @@ export class MyComponent {
     { name: 'Sahana', age: 2, city:"Rajapalayam",id: 13 },
     { name: 'ArjunRam', age: 1, city:"Rajapalayam",id: 14 },
     { name: 'MuthuMani', age: 24, city:"Rajapalayam",id: 15 },
+    { name: 'sas', age: 33,city:"Rajapalayam", id: 16 },
   ];
 
   render() {
     return (
       <div>
         <div>
-          <basic-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></basic-table>
+          {/* <basic-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></basic-table> */}
           <data-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></data-table>
         </div>
       </div>
