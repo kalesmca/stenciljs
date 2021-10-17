@@ -26,7 +26,7 @@ Need help? Reach out : kalesmca@gmail.com.
 ```bash
 
   const columnHeader = [
-    { label: 'Name', key: 'name' },
+    { label: 'Name', key: 'name', isSorting:true },
     { label: 'Age', key: 'age' },
   ];
 

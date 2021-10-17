@@ -16,7 +16,7 @@ export namespace Components {
         "pageLimit": number;
     }
     interface MyComponent {
-        "columnHeader": { label: string; key: string; }[];
+        "columnHeader": { label: string; key: string; isSorting: boolean; }[];
         "data": { name: string; age: number; city: string; id: number; }[];
         /**
           * The first name
@@ -78,7 +78,7 @@ declare namespace LocalJSX {
         "pageLimit"?: number;
     }
     interface MyComponent {
-        "columnHeader"?: { label: string; key: string; }[];
+        "columnHeader"?: { label: string; key: string; isSorting: boolean; }[];
         "data"?: { name: string; age: number; city: string; id: number; }[];
         /**
           * The first name
