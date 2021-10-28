@@ -52,7 +52,7 @@ export class MyComponent {
       <div>
         <div>
           {/* <basic-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></basic-table> */}
-          <data-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></data-table>
+          <data-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)} isPagination={true}></data-table>
         </div>
       </div>
     );

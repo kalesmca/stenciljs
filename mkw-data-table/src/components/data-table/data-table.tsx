@@ -12,9 +12,11 @@ export class DataTable {
 
   @State() currentIndex: number = 1;
 
+  @Prop({ mutable: true }) isPagination: boolean = false;
+
   @State() startFrom: number = 0;
 
-  @Prop({ mutable: true }) pageLimit = 5;
+  @Prop({ mutable: true }) pageLimit = 2;
 
   @State() tableData: Array<any> = [];
 
@@ -24,26 +26,30 @@ export class DataTable {
 
   @State() isAsc: boolean = true;
 
-  componentWillLoad() {
+  componentWillLoad () {
     this.getUpdatedHeaderValue(this.header);
     this.getUpdatedTableData(this.data);
   }
 
   @Watch('header')
-  getUpdatedHeaderValue(newValue) {
+  getUpdatedHeaderValue (newValue) {
     if (newValue) {
       this.tableHeader = JSON.parse(newValue);
     }
   }
 
   @Watch('data')
-  getUpdatedTableData(newValue) {
+  getUpdatedTableData (newValue) {
     if (newValue) {
       this.tableData = JSON.parse(newValue);
     }
-    this.paginationNumberList = Array.from(Array(Math.round(this.tableData.length / this.pageLimit)), (_, index) => index + 1);
-    if (this.tableData.length > this.paginationNumberList.length * this.pageLimit) {
-      this.paginationNumberList.push(this.paginationNumberList.length + 1);
+    if (this.isPagination) {
+      this.paginationNumberList = Array.from(Array(Math.round(this.tableData.length / this.pageLimit)), (_, index) => index + 1);
+      if (this.tableData.length > this.paginationNumberList.length * this.pageLimit) {
+        this.paginationNumberList.push(this.paginationNumberList.length + 1);
+      }
+    } else {
+      this.pageLimit = this.tableData.length;
     }
   }
 
@@ -61,6 +67,13 @@ export class DataTable {
 
   setPaginationValue = index => {
     this.startFrom = index * this.pageLimit;
+  };
+
+  changePageLimit = event => {
+    console.log('event :', event);
+    this.pageLimit = event.target.value;
+    this.getUpdatedTableData(this.data);
+    // debugger
   };
 
   sorting = key => {
@@ -90,7 +103,7 @@ export class DataTable {
     this.isAsc = !this.isAsc;
   };
 
-  render() {
+  render () {
     let tableBodyItems = [];
     if (this.tableData.length) {
       for (let i = this.startFrom; i < this.startFrom + this.pageLimit; i++) {
@@ -108,8 +121,7 @@ export class DataTable {
     }
 
     return (
-      <div>
-        Data Table : {this.isAsc ? <div>sas</div> : <div>ss</div>}
+      <div class="container">
         {this.tableHeader.length ? (
           <table>
             <thead>
@@ -141,34 +153,56 @@ export class DataTable {
         ) : (
           <div>No table data found</div>
         )}
-        <div class="pag-container">
-          <button
-            onClick={() => {
-              this.getPreviousData();
-            }}
-          >
-            {'<'}
-          </button>
-          {this.paginationNumberList.map((number, index) => {
-            return (
-              <span
-                key={index}
+        {this.isPagination ? (
+          <div>
+            <div class="pag-container">
+              <span>Row per page :</span>
+              <span>
+                <select
+                  name="limit"
+                  id="limit"
+                  onChange={e => {
+                    this.changePageLimit(e);
+                  }}
+                >
+                  <option value={2}>2</option>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={15}>15</option>
+                </select>
+              </span>
+
+              <button
                 onClick={() => {
-                  this.setPaginationValue(index);
+                  this.getPreviousData();
                 }}
               >
-                {number}
-              </span>
-            );
-          })}
-          <button
-            onClick={() => {
-              this.getNextData();
-            }}
-          >
-            {'>'}
-          </button>
-        </div>
+                {'<'}
+              </button>
+              {this.paginationNumberList.map((number, index) => {
+                return (
+                  <span
+                    key={index}
+                    onClick={() => {
+                      this.setPaginationValue(index);
+                    }}
+                  >
+                    {number}
+                  </span>
+                );
+              })}
+              <button
+                onClick={() => {
+                  this.getNextData();
+                }}
+              >
+                {'>'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     );
   }

@@ -13,6 +13,7 @@ export namespace Components {
     interface DataTable {
         "data": string;
         "header": string;
+        "isPagination": boolean;
         "pageLimit": number;
     }
     interface MyComponent {
@@ -75,6 +76,7 @@ declare namespace LocalJSX {
     interface DataTable {
         "data"?: string;
         "header"?: string;
+        "isPagination"?: boolean;
         "pageLimit"?: number;
     }
     interface MyComponent {

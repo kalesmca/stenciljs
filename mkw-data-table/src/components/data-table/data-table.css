@@ -19,6 +19,15 @@ span {
 }
 
 .pag-container {
+    margin-top: 2rem;
     float: right;
     margin-right: 3rem;
+}
+
+.container {
+    border: 1px solid black;
+}
+
+.body-con {
+    border: 1px solid black;
 }
