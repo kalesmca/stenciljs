@@ -13,8 +13,7 @@ export namespace Components {
     interface DataTable {
         "data": string;
         "header": string;
-        "isPagination": boolean;
-        "pageLimit": number;
+        "pagination": string;
     }
     interface MyComponent {
         "columnHeader": { label: string; key: string; isSorting: boolean; }[];
@@ -31,6 +30,7 @@ export namespace Components {
           * The middle name
          */
         "middle": string;
+        "pagination": { isPagination: boolean; paginationLimitList: number[]; };
     }
     interface TestList {
         "options": string;
@@ -76,8 +76,7 @@ declare namespace LocalJSX {
     interface DataTable {
         "data"?: string;
         "header"?: string;
-        "isPagination"?: boolean;
-        "pageLimit"?: number;
+        "pagination"?: string;
     }
     interface MyComponent {
         "columnHeader"?: { label: string; key: string; isSorting: boolean; }[];
@@ -94,6 +93,7 @@ declare namespace LocalJSX {
           * The middle name
          */
         "middle"?: string;
+        "pagination"?: { isPagination: boolean; paginationLimitList: number[]; };
     }
     interface TestList {
         "options"?: string;

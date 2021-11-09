@@ -10,13 +10,13 @@ export class DataTable {
 
   @Prop({ mutable: true }) header: string;
 
+  @Prop({ mutable: true }) pagination: string;
+
   @State() currentIndex: number = 1;
 
-  @Prop({ mutable: true }) isPagination: boolean = false;
+  @State() paginationData: any = {}
 
   @State() startFrom: number = 0;
-
-  @Prop({ mutable: true }) pageLimit = 2;
 
   @State() tableData: Array<any> = [];
 
@@ -26,54 +26,61 @@ export class DataTable {
 
   @State() isAsc: boolean = true;
 
-  componentWillLoad () {
+  componentWillLoad() {
+    this.getPaginationData(this.pagination);
     this.getUpdatedHeaderValue(this.header);
     this.getUpdatedTableData(this.data);
   }
 
+  @Watch('pagination')
+  getPaginationData(newValue) {
+    if (newValue) {
+      this.paginationData = JSON.parse(newValue)
+      this.paginationData.pageLimit = this.paginationData.paginationLimitList && this.paginationData.paginationLimitList.length ? this.paginationData.paginationLimitList[0] : 5;
+    }
+  }
+
   @Watch('header')
-  getUpdatedHeaderValue (newValue) {
+  getUpdatedHeaderValue(newValue) {
     if (newValue) {
       this.tableHeader = JSON.parse(newValue);
     }
   }
 
   @Watch('data')
-  getUpdatedTableData (newValue) {
+  getUpdatedTableData(newValue) {
     if (newValue) {
       this.tableData = JSON.parse(newValue);
     }
-    if (this.isPagination) {
-      this.paginationNumberList = Array.from(Array(Math.round(this.tableData.length / this.pageLimit)), (_, index) => index + 1);
-      if (this.tableData.length > this.paginationNumberList.length * this.pageLimit) {
+    if (this.paginationData && this.paginationData.isPagination) {
+      this.paginationNumberList = Array.from(Array(Math.round(this.tableData.length / this.paginationData.pageLimit)), (_, index) => index + 1);
+      if (this.tableData.length > this.paginationNumberList.length * this.paginationData.pageLimit) {
         this.paginationNumberList.push(this.paginationNumberList.length + 1);
       }
     } else {
-      this.pageLimit = this.tableData.length;
+      this.paginationData.pageLimit = this.tableData.length;
     }
   }
 
   getNextData = () => {
-    if (this.startFrom + this.pageLimit < this.tableData.length) {
-      this.startFrom = this.startFrom + this.pageLimit;
+    if (this.startFrom + this.paginationData.pageLimit < this.tableData.length) {
+      this.startFrom = this.startFrom + this.paginationData.pageLimit;
     }
   };
 
   getPreviousData = () => {
     if (this.startFrom) {
-      this.startFrom = this.startFrom - this.pageLimit;
+      this.startFrom = this.startFrom - this.paginationData.pageLimit;
     }
   };
 
   setPaginationValue = index => {
-    this.startFrom = index * this.pageLimit;
+    this.startFrom = index * this.paginationData.pageLimit;
   };
 
   changePageLimit = event => {
-    console.log('event :', event);
-    this.pageLimit = event.target.value;
+    this.paginationData.pageLimit = event.target.value;
     this.getUpdatedTableData(this.data);
-    // debugger
   };
 
   sorting = key => {
@@ -103,10 +110,10 @@ export class DataTable {
     this.isAsc = !this.isAsc;
   };
 
-  render () {
+  render() {
     let tableBodyItems = [];
     if (this.tableData.length) {
-      for (let i = this.startFrom; i < this.startFrom + this.pageLimit; i++) {
+      for (let i = this.startFrom; i < this.startFrom + this.paginationData.pageLimit; i++) {
         if (this.tableData[i]) {
           tableBodyItems.push(
             <tr>
@@ -153,7 +160,7 @@ export class DataTable {
         ) : (
           <div>No table data found</div>
         )}
-        {this.isPagination ? (
+        {this.paginationData && this.paginationData.isPagination ? (
           <div>
             <div class="pag-container">
               <span>Row per page :</span>
@@ -165,10 +172,14 @@ export class DataTable {
                     this.changePageLimit(e);
                   }}
                 >
-                  <option value={2}>2</option>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
+                  {
+                    this.paginationData.paginationLimitList.map((limit) => {
+                      return (<option value={limit}>{limit}</option>)
+
+                    })
+                  }
+
+
                 </select>
               </span>
 

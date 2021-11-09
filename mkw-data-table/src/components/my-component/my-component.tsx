@@ -47,12 +47,18 @@ export class MyComponent {
     { name: 'sas', age: 33,city:"Bangalore", id: 16 },
   ];
 
+  @Prop({mutable:true}) pagination = {
+    isPagination: true,
+    paginationLimitList: [5,10]
+
+  }
+
   render() {
     return (
       <div>
         <div>
           {/* <basic-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)}></basic-table> */}
-          <data-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)} isPagination={true}></data-table>
+          <data-table data={JSON.stringify(this.data)} header={JSON.stringify(this.columnHeader)} pagination={JSON.stringify(this.pagination)} ></data-table>
         </div>
       </div>
     );
